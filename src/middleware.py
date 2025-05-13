@@ -3,12 +3,17 @@ from fastapi import FastAPI, Depends, HTTPException, Request, status, Body
 import logging
 import httpx
 import time
+import os
 
 from datetime import timedelta
 from constants import *
 from auth import authenticate_user, create_access_token, get_current_active_user, get_current_user, oauth2_scheme
 from pydantic_models import Token, LoginRequest, User, NewUserRequest
 import database as db
+
+# Clear proxy settings if needed
+os.environ["http_proxy"] = ""
+os.environ["https_proxy"] = ""
 
 app = FastAPI()
 
