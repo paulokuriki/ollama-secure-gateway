@@ -1,4 +1,4 @@
-# Ollama Middleware
+# Ollama Secure Gateway
 
 A FastAPI-based proxy middleware that supports:
 
