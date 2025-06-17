@@ -1,7 +1,7 @@
 DB_FILE = 'users_db.json'
 LOGGING_FILE = 'api_usage.log'
 TIMEOUT = 10
-SECRET_KEY = "your-secret-key"
+SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-TARGET_SERVER = "http://localhost:11434"
+TARGET_SERVER = "http://localhost:11434" 

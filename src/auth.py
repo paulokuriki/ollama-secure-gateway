@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Depends, HTTPException, Request, status, Body
-from pydantic_models import *
+from src.pydantic_models import *
 from datetime import datetime, timedelta
 from fastapi.security import OAuth2PasswordBearer
 import jwt
-import constants as c
-import database as db
+from src.constants import *
+from src.database import *
 import bcrypt
 
 # OAuth2 Bearer token setup
@@ -30,7 +30,7 @@ def get_user(db, username: str):
     return None
 
 def authenticate_user(username: str, password: str):
-    tb_users = db.load_db()
+    tb_users = load_db()
     user = get_user(tb_users, username)
     if not user or not verify_password(password, user.hashed_password) or not user.is_active:
         return False
@@ -43,7 +43,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, c.SECRET_KEY, algorithm=c.ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
@@ -53,13 +53,13 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, c.SECRET_KEY, algorithms=[c.ALGORITHM])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
     except jwt.PyJWTError:
         raise credentials_exception
-    tb_users = db.load_db()
+    tb_users = load_db()
     user = get_user(tb_users, username)
     if user is None:
         raise credentials_exception
@@ -68,5 +68,4 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 async def get_current_active_user(current_user: User = Depends(get_current_user)):
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
-
+    return current_user 

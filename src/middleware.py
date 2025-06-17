@@ -6,10 +6,10 @@ import time
 import os
 
 from datetime import timedelta
-from constants import *
-from auth import authenticate_user, create_access_token, get_current_active_user, get_current_user, oauth2_scheme
-from pydantic_models import Token, LoginRequest, User, NewUserRequest
-import database as db
+from src.constants import *
+from src.auth import authenticate_user, create_access_token, get_current_active_user, get_current_user, oauth2_scheme
+from src.pydantic_models import Token, LoginRequest, User, NewUserRequest
+from src.database import *
 
 # Clear proxy settings if needed
 os.environ["http_proxy"] = ""
@@ -43,7 +43,7 @@ async def login_for_access_token(login_request: LoginRequest = Body(...)):
 @app.post("/users", status_code=status.HTTP_201_CREATED)
 async def create_new_user(new_user: NewUserRequest):
     try:
-        db.add_new_user(
+        add_new_user(
             username=new_user.username,
             full_name=new_user.full_name,
             email=new_user.email,
@@ -117,4 +117,4 @@ async def proxy_requests(full_path: str, request: Request, current_user: User = 
         )
 
     # Return the response from the target server
-    return response.text
+    return response.text 

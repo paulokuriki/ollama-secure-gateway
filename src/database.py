@@ -1,6 +1,8 @@
 import json
+import os
+from src.constants import *
+from src.pydantic_models import *
 from typing import List, Dict, Any
-import constants as c
 import bcrypt
 
 
@@ -21,7 +23,7 @@ def load_db() -> List[Dict[str, Any]]:
         List[Dict[str, Any]]: A list of dictionaries representing the database.
     """
     try:
-        with open(c.DB_FILE, 'r') as file:
+        with open(DB_FILE, 'r') as file:
             data = json.load(file)
             if isinstance(data, list):
                 return data
@@ -40,9 +42,9 @@ def _save_db(data: List[Dict[str, Any]]) -> None:
         data (List[Dict[str, Any]]): The list of dictionaries to be saved.
     """
     try:
-        with open(c.DB_FILE, 'w') as file:
+        with open(DB_FILE, 'w') as file:
             json.dump(data, file, indent=4)
-        print(f"Database successfully saved to {c.DB_FILE}")
+        print(f"Database successfully saved to {DB_FILE}")
     except Exception as e:
         print(f"Error saving database: {e}")
 
@@ -88,4 +90,4 @@ def add_new_user(username: str, full_name: str, email: str, password: str) -> No
     # Save the updated database
     _save_db(db)
 
-    print(f"New user '{username}' added and saved to database.")
+    print(f"New user '{username}' added and saved to database.") 

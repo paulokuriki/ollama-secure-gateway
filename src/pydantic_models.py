@@ -1,17 +1,20 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
 class User(BaseModel):
     username: str
-    email: str = None
-    full_name: str = None
-    is_active: bool = None
+    email: Optional[EmailStr] = None
+    full_name: Optional[str] = None
+    is_active: Optional[bool] = True
 
 class UserInDB(User):
-    disabled: bool = None
     hashed_password: str
 
 class LoginRequest(BaseModel):
@@ -20,6 +23,6 @@ class LoginRequest(BaseModel):
 
 class NewUserRequest(BaseModel):
     username: str
-    full_name: str
     email: EmailStr
-    password: str
+    full_name: str
+    password: str 
